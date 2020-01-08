@@ -109,7 +109,7 @@ Options:
 ```javascript
 {
 	length: 6,
-    charset: '1234abcd'
+  charset: '1234abcd'
 }
 ```
 
