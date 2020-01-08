@@ -1,0 +1,9 @@
+{
+  "name": "isci",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-random-string": "^3.0.1"
+  }
+}
