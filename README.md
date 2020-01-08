@@ -1,6 +1,8 @@
+# ISCI Library for Javascript
+
 # What is Identification SCheme Information (ISCI) ?
 
-Identification Information Schema (**ISCI**) is a scheme that contains information from identification labels. **ISCI** can be used instead of _UUID_, _Increment_, _Timestamp_, or _Hash_ in the ID component. **ISCI** can be used across platforms. Depends on the availability of libraries from each language. **ISCI** uses _JSON_ as a format in defining schemas. In cases in the field, **ISCI** can be stored in databases such as _MongoDB_, _MYSQL_ or _REDIS_ (in the form of strings).
+_Identification Information Schema_ (**ISCI**) is a scheme that contains information from identification labels. **ISCI** can be used instead of _UUID_, _Increment_, _Timestamp_, or _Hash_ in the ID component. **ISCI** can be used across platforms. Depends on the availability of libraries from each language. **ISCI** uses _JSON_ as a format in defining schemas. In cases in the field, **ISCI** can be stored in databases such as _MongoDB_, _MYSQL_ or _REDIS_ (in the form of strings).
 
 # Usage
 
@@ -29,7 +31,7 @@ const customerIsci = new ISCI({
   keywords: {
     firstId: {
       // See Supported Keyword Types section for more type
-      type: 'randCharsetset',
+      type: 'randCharset',
       length: 5,
       // In this example we use alphabetic. You can change it!
       charset: 'abcdefghijklmnopqrstuvwxyz'
@@ -79,10 +81,10 @@ Example:
 
 ## Supported Keyword Types
 
-- randCharset
-- incrNumber
-- incrSingleCharset
-- incrMultipleCharset
+- [randCharset](#randcharset)
+- [incrNumber](#incrNumber)
+- [incrSingleCharset](#incrSingleCharset)
+- [incrMultiCharsets](#incrMultiCharsets)
 - TODO: shuffleCharset
 - TODO: timestamp
 - TODO: customValue
@@ -108,12 +110,12 @@ Options:
 
 ```javascript
 {
-	length: 6,
-  charset: '1234abcd'
+  length: 6,
+  charset: '1234abcd', // You can replace this with any character
 }
 ```
 
-Output: (4x)
+Output: (Run 4x)
 
 ```bash
 bdaa13
@@ -146,7 +148,7 @@ Options:
 }
 ```
 
-Output: (5x)
+Output: (Run 5x)
 
 ```bash
 4
@@ -182,7 +184,7 @@ Options:
 }
 ```
 
-Output: (6x)
+Output: (Run 6x)
 
 ```bash
 aaaaa
@@ -217,7 +219,7 @@ Options:
 }
 ```
 
-Output: (4x)
+Output: (Run 4x)
 
 ```bash
 a1dg
@@ -226,7 +228,7 @@ a1di
 a1eg
 ```
 
-#### See `examples.js` file for more example usage.
+#### See [`examples.js`](https://github.com/laodemalfatih/js-isci/blob/master/examples.js) file for more example usage.
 
 ## TODO
 
