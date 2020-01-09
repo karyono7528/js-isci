@@ -1,8 +1,10 @@
+[![](https://data.jsdelivr.com/v1/package/npm/js-isci/badge)](https://www.jsdelivr.com/package/npm/js-isci)
+
 # ISCI Library for Javascript
 
 # What is Identification SCheme Information (ISCI) ?
 
-_Identification Information Schema_ (**ISCI**) is a scheme that contains information from identification labels. **ISCI** can be used instead of _UUID_, _Increment_, _Timestamp_, or _Hash_ in the ID component. **ISCI** can be used across platforms. Depends on the availability of libraries from each language. **ISCI** uses _JSON_ as a format in defining schemas. In cases in the field, **ISCI** can be stored in databases such as _MongoDB_, _MYSQL_ or _REDIS_ (in the form of strings).
+_Identification Information Schema_ (**ISCI**) is a scheme that contains information from identification labels. **ISCI** can be used instead of _UUID_, _Increment_, _Timestamp_, or _Hash_ in the _ID_ component. **ISCI** can be used across platforms. Depends on the availability of libraries from each language. **ISCI** uses _JSON_ as a format in defining schemas. In cases in the field, **ISCI** can be stored in _databases_ such as **MongoDB**, **MYSQL** or **REDIS** (as _JSON_ string).
 
 # Usage
 
@@ -11,7 +13,7 @@ _Identification Information Schema_ (**ISCI**) is a scheme that contains informa
 CDN:
 
 ```html
-<script src="https://unpkg.com/isci@latest" />
+<script src="https://cdn.jsdelivr.net/npm/js-isci@latest/build/index.min.js" />
 ```
 
 Module:
@@ -21,62 +23,83 @@ Module:
 npm install isci
 ```
 
+## Usage In Browser
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/js-isci@latest/build/index.min.js" />
+
+<script>
+  isci.next(yourIsci);
+</script>
+```
+
 ## Example
 
-```javascript
-const { ISCI } = require('isci');
+<details>
+<summary><b>Code</b></summary>
 
-const customerIsci = new ISCI({
-  pattern: '{firstId}-{youCanChangeThisName}',
+```js
+const isci = require('./index');
+
+const sampleIsci = {
+  pattern: '<index>-[keyword_1]-[keyword_2]-[keyword_3]',
   keywords: {
-    firstId: {
-      // See Supported Keyword Types section for more type
+    keyword_1: {
       type: 'randCharset',
       length: 5,
-      // In this example we use alphabetic. You can change it!
-      charset: 'abcdefghijklmnopqrstuvwxyz'
+      charset: 'abcdefg'
     },
-    youCanChangeThisName: {
+    keyword_2: {
       type: 'incrSingleCharset',
-      length: 3,
       currentIndex: 0,
       valueIncrease: 1,
-      charset: 'abcdefghijklmnopqrstuvwxyz'
+      length: 6,
+      charset: 'hijkl'
+    },
+    keyword_3: {
+      type: 'incrMultiCharsets',
+      currentIndex: 0,
+      valueIncrease: 1,
+      charsets: ['mnopq', 'rstuv', 'wxyz', '01234', '56789']
     }
   }
-});
+};
 
-console.log(customerIsci.next());
-console.log(customerIsci.next());
-console.log(customerIsci.next());
-console.log(customerIsci.next());
-
-// Or you can use without create new class instance
-
-const opt = {...} // Fill with your option
-
-console.log(ISCI.next(opt));
-console.log(ISCI.next(opt));
-console.log(ISCI.next(opt));
+let i = 0;
+while (i++ < 5) {
+  console.log(
+    isci.next(sampleIsci, {
+      index: i
+    })
+  );
+}
 ```
+
+</details>
 
 Output:
 
 ```bash
-hpsiz-aaa
-wrwcq-aab
-bulhr-aac
-ucbzg-aad
+1-ceada-hhhhhh-mrw05
+2-beddf-hhhhhi-mrw06
+3-aefgb-hhhhhj-mrw07
+4-dbfea-hhhhhk-mrw08
+5-bacgd-hhhhhl-mrw09
 ```
+
+**\* You can use the result above as an _ID_ for your data like _`documentId`_, _`secretId`_, _`userId`_, etc.**
 
 ## Pattern Format
 
-### `{keywordName}`
+### Keyword: `[keywordName]`
+
+### Param: `<paramName>`
 
 Example:
 
-```
-{test1} another character can insert in here {test2}
+```js
+const pattern1 = '<index>_[departementSection]_[randomCharacter]';
+const pattern2 = '[randomName]-[timestamp]';
 ```
 
 ## Supported Keyword Types
@@ -85,9 +108,8 @@ Example:
 - [incrNumber](#incrNumber)
 - [incrSingleCharset](#incrSingleCharset)
 - [incrMultiCharsets](#incrMultiCharsets)
-- TODO: shuffleCharset
-- TODO: timestamp
-- TODO: customValue
+- [currentDate](#currentDate)
+- [currentUnixTimestamp](#currentUnixTimestamp)
 
 ### randCharset
 
@@ -95,12 +117,12 @@ Generate random strings from available charset.
 
 #### Keyword Properties:
 
-| Properties Name | Type     | Ex Value                      |
-| --------------- | -------- | ----------------------------- |
-| charset         | `string` | `"abcdefghiklmnopqrstuvwxyz"` |
-| length          | `number` | `5`                           |
-| minLength       | `number` | `0`                           |
-| maxLength       | `number` | `5`                           |
+| Properties Name | Type     |
+| --------------- | -------- |
+| length          | `number` |
+| minLength       | `number` |
+| maxLength       | `number` |
+| charset         | `string` |
 
 > You have to choose one, use `length` or use `minLength` and `maxLength`. The second choice causes the system to generate random length between `minLength` (inclusive) and `maxLength` (inclusive)
 
@@ -108,7 +130,7 @@ Generate random strings from available charset.
 
 Options:
 
-```javascript
+```js
 {
   length: 6,
   charset: '1234abcd', // You can replace this with any character
@@ -130,17 +152,17 @@ Increment number with specific value.
 
 #### Keyword Properties:
 
-| Properties Name | Type     | Ex Value |
-| --------------- | -------- | -------- |
-| currentIndex    | `number` | `0`      |
-| valueIncrease   | `number` | `1`      |
-| startNumber     | `number` | `0`      |
+| Properties Name | Type     |
+| --------------- | -------- |
+| currentIndex    | `number` |
+| valueIncrease   | `number` |
+| startNumber     | `number` |
 
 #### Example:
 
 Options:
 
-```javascript
+```js
 {
   currentIndex: 0,
   valueIncrease: 3,
@@ -164,18 +186,18 @@ Increment character based on its index position in charset.
 
 #### Keyword Properties:
 
-| Properties Name | Type     | Ex Value                       |
-| --------------- | -------- | ------------------------------ |
-| currentIndex    | `number` | `0`                            |
-| valueIncrease   | `number` | `1`                            |
-| length          | `number` | `3`                            |
-| charset         | `string` | `"abcdefghijklmnopqrstuvwxyz"` |
+| Properties Name | Type     |
+| --------------- | -------- |
+| currentIndex    | `number` |
+| valueIncrease   | `number` |
+| length          | `number` |
+| charset         | `string` |
 
 #### Example:
 
 Options:
 
-```javascript
+```js
 {
   currentIndex: 0,
   valueIncrease: 1,
@@ -197,21 +219,21 @@ aaaaf
 
 ### incrMultiCharsets
 
-Same as `incrSingleCharset`, the difference is it uses many charsets at once.
+Same as [`incrSingleCharset`](#incrSingleCharset), the difference is it uses many charsets at once and the length of result follow the length of the `charsets`.
 
 #### Keyword Properties:
 
-| Properties Name | Type       | Ex Value                |
-| --------------- | ---------- | ----------------------- |
-| currentIndex    | `number`   | `0`                     |
-| valueIncrease   | `number`   | `1`                     |
-| charsets        | `[string]` | `["abc", "def", "ghi"]` |
+| Properties Name | Type       |
+| --------------- | ---------- |
+| currentIndex    | `number`   |
+| valueIncrease   | `number`   |
+| charsets        | `[string]` |
 
 #### Example:
 
 Options:
 
-```javascript
+```js
 {
   currentIndex: 0,
   valueIncrease: 1,
@@ -228,10 +250,50 @@ a1di
 a1eg
 ```
 
+### currentDate
+
+Only date. nothing is different. it looks like no description is needed.
+
+#### Keyword Properties:
+
+| Properties Name | Type     |
+| --------------- | -------- |
+| format          | `string` |
+
+> `format` string can be anything, but the following letters will be replaced (and leading zeroes added if necessary) ... See: [date-format](https://github.com/nomiddlename/date-format#formatting-dates-as-strings) for more information.
+
+#### Example:
+
+Options:
+
+```js
+{
+  format: 'yyyy-MM-dd/hh-mm-ss.SSS';
+}
+```
+
+Output: (Run 1x)
+
+```bash
+2020-01-09/15-00-00.000
+```
+
+### currentUnixTimestamp
+
+Everything has been explained in [unixtimestamp.com](https://www.unixtimestamp.com/)
+
+#### Keyword Properties:
+
+_No property needed_
+
+#### Example:
+
+Output: (Run 3x)
+
+```bash
+1578560571114
+1578560571116
+1578560571117
+```
+
 #### See [`examples.js`](https://github.com/laodemalfatih/js-isci/blob/master/examples.js) file for more example usage.
-
-## TODO
-
-- [ ] Keyword Type: `shuffleCharset`
-- [ ] Keyword Type: `timestamp`
-- [ ] Keyword Type: `customValue`

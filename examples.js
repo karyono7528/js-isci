@@ -1,47 +1,48 @@
-const { ISCI } = require('./index');
+const isci = require('./src/index');
 
-const customerIsci = new ISCI({
-  pattern: '{test1}-{test2}-{test3}-{test4}-{test5}',
+const sampleIsci = {
+  pattern:
+    '<index>-[keyword_1]-[keyword_2]-[keyword_3]-[keyword_4]-[keyword_5]-[keyword_6]',
   keywords: {
-    test1: {
+    keyword_1: {
       type: 'randCharset',
-      length: 4,
-      charset: 'abcdefghijklmnopqrstuvwxyz0123456789'
+      length: 5,
+      charset: 'abcdefg'
     },
-    test2: {
+    keyword_2: {
       type: 'incrNumber',
-      startNumber: 0,
       currentIndex: 0,
-      valueIncrease: 1
+      valueIncrease: 1,
+      startNumber: 0
     },
-    test3: {
+    keyword_3: {
       type: 'incrSingleCharset',
       currentIndex: 0,
       valueIncrease: 1,
-      length: 5,
-      charset: 'abcdefghijklmnopqrstuvwxyz0123456789'
+      length: 6,
+      charset: 'hijkl'
     },
-    test4: {
+    keyword_4: {
       type: 'incrMultiCharsets',
       currentIndex: 0,
       valueIncrease: 1,
-      charsets: [
-        'abcdefghijklmnopqrstuvwxyz',
-        '0123456789',
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      ]
+      charsets: ['mnopq', 'rstuv', 'wxyz', '01234', '56789']
     },
-    test5: {
-      type: 'randCharset',
-      minLength: 5,
-      maxLength: 15,
-      charset: 'abcdefghijklmnopqrstuvwxyz0123456789'
+    keyword_5: {
+      type: 'currentDate',
+      format: 'yyyy/MM'
+    },
+    keyword_6: {
+      type: 'currentUnixTimestamp'
     }
   }
-});
+};
 
-// Print 100 Unique Customer ID
-let count = 100;
-while (count--) {
-  console.log(customerIsci.next());
+let i = 0;
+while (i++ < 100) {
+  console.log(
+    isci.next(sampleIsci, {
+      index: i
+    })
+  );
 }

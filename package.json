@@ -1,18 +1,32 @@
 {
   "name": "js-isci",
   "version": "1.0.1",
-  "main": "index.js",
+  "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
-    "crypto-random-string": "^3.0.1"
+    "date-format": "^3.0.0",
+    "math-random": "^1.0.4"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "jest": "^24.9.0",
+    "uglify-es": "^3.3.9"
   },
   "description": "ISCI library for Javascript",
   "repository": "https://github.com/laodemalfatih/js-isci",
   "author": "Laode Muhammad Al Fatih <laodemalfatih@gmail.com>",
   "keywords": [
     "isci",
-    "id-schema",
+    "unique",
+    "unique-id",
+    "identification",
     "increment",
-    "unique-id"
-  ]
+    "schema",
+    "id-generator",
+    "random"
+  ],
+  "scripts": {
+    "test": "jest",
+    "build": "browserify src/index.js | uglifyjs -c -m > build/index.min.js"
+  }
 }
