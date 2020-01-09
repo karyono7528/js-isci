@@ -1,5 +1,6 @@
 const dateFormat = require('date-format');
 const mathRandom = require('math-random');
+const extend = require('extend');
 
 const KEYWORD_REGEX = new RegExp('\\[([^\\[\\]]+)\\]');
 const PARAM_REGEX = new RegExp('<([^<>]+)>');
@@ -117,21 +118,21 @@ function next(isci, params = {}) {
   let matchedKeyword;
 
   while ((matchedParam = PARAM_REGEX.exec(result))) {
-    result =
-      result.substring(0, matchedParam.index) +
-      (Object.prototype.hasOwnProperty.call(params, matchedParam[1])
+    result = result.replace(
+      new RegExp(matchedParam[0], 'g'),
+      Object.prototype.hasOwnProperty.call(params, matchedParam[1])
         ? params[matchedParam[1]]
-        : '') +
-      result.substring(matchedParam.index + matchedParam[0].length);
+        : ''
+    );
   }
 
   while ((matchedKeyword = KEYWORD_REGEX.exec(result))) {
-    result =
-      result.substring(0, matchedKeyword.index) +
-      (isci.keywords[matchedKeyword[1]]
+    result = result.replace(
+      new RegExp(matchedKeyword[0].replace(/\[([^\[\]]+)\]/, '\\[$1\\]'), 'g'),
+      isci.keywords[matchedKeyword[1]]
         ? processKeyword(isci.keywords[matchedKeyword[1]])
-        : '') +
-      result.substring(matchedKeyword.index + matchedKeyword[0].length);
+        : ''
+    );
   }
 
   return result;
@@ -146,7 +147,9 @@ function next(isci, params = {}) {
  * @param {object} params Your parameter to be passed
  */
 function safeNext(isci, params) {
-  const clonedIsci = { ...isci };
+  const clonedIsci = {};
+  extend(true, clonedIsci, isci);
+
   return {
     result: next(clonedIsci, params),
     updatedIsci: clonedIsci

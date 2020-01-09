@@ -1,4 +1,7 @@
+[![Build Status](https://api.travis-ci.com/laodemalfatih/js-isci.svg?branch=master)](https://travis-ci.org/laodemalfatih/js-isci)
+[![codecov](https://codecov.io/gh/laodemalfatih/js-isci/branch/master/graph/badge.svg)](https://codecov.io/gh/laodemalfatih/js-isci)
 [![](https://data.jsdelivr.com/v1/package/npm/js-isci/badge)](https://www.jsdelivr.com/package/npm/js-isci)
+[![GitHub license](https://img.shields.io/github/license/laodemalfatih/js-isci?color=informational&style=flat-square)](https://github.com/laodemalfatih/js-isci/blob/master/LICENSE)
 
 # ISCI Library for Javascript
 

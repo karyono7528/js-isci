@@ -176,4 +176,51 @@ describe('valid result', () => {
       expect(parseInt(isci.next(targetIsci))).toBeTruthy();
     }
   });
+
+  test('valid result with parameter', () => {
+    let numberOfTest = 10;
+
+    const targetIsci = {
+      pattern: '<index>-[currentUnixTimestamp]',
+      keywords: {
+        currentUnixTimestamp: {
+          type: 'currentUnixTimestamp'
+        }
+      }
+    };
+
+    while (numberOfTest--) {
+      expect(
+        isci.next(targetIsci, {
+          index: numberOfTest
+        })
+      ).toMatch(new RegExp(`^${numberOfTest}-`));
+    }
+  });
+
+  test('valid result safeNext', () => {
+    let numberOfTest = 10;
+
+    const startNumber = 0;
+    const currentIndex = 0;
+    const valueIncrease = 1;
+
+    const targetIsci = {
+      pattern: '[incrNumber]',
+      keywords: {
+        incrNumber: {
+          type: 'incrNumber',
+          startNumber,
+          currentIndex,
+          valueIncrease
+        }
+      }
+    };
+    const backupIsci = JSON.parse(JSON.stringify(targetIsci));
+
+    while (numberOfTest--) {
+      isci.safeNext(targetIsci);
+      expect(targetIsci).toStrictEqual(backupIsci);
+    }
+  });
 });

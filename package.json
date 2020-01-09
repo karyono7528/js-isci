@@ -5,10 +5,12 @@
   "license": "MIT",
   "dependencies": {
     "date-format": "^3.0.0",
+    "extend": "^3.0.2",
     "math-random": "^1.0.4"
   },
   "devDependencies": {
     "browserify": "^16.5.0",
+    "codecov": "^3.6.1",
     "jest": "^24.9.0",
     "uglify-es": "^3.3.9"
   },
@@ -26,7 +28,11 @@
     "random"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest && codecov",
     "build": "browserify src/index.js | uglifyjs -c -m > build/index.min.js"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
