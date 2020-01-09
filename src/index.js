@@ -1,5 +1,4 @@
 const dateFormat = require('date-format');
-const mathRandom = require('math-random');
 const extend = require('extend');
 
 const KEYWORD_REGEX = new RegExp('\\[([^\\[\\]]+)\\]');
@@ -76,14 +75,14 @@ function randomString(charset, length) {
   let result = '';
 
   while (length--) {
-    result += charset.charAt(parseInt(mathRandom() * charset.length, 10));
+    result += charset.charAt((Math.random() * charset.length) | 0);
   }
 
   return result;
 }
 
 function randomInt(min, max) {
-  return Math.floor(mathRandom() * (max - min + 1)) + min;
+  return ((Math.random() * (max - min + 1)) | 0) + min;
 }
 
 function reverse(string) {
@@ -117,22 +116,22 @@ function next(isci, params = {}) {
   let matchedParam;
   let matchedKeyword;
 
-  while ((matchedParam = PARAM_REGEX.exec(result))) {
-    result = result.replace(
-      new RegExp(matchedParam[0], 'g'),
-      Object.prototype.hasOwnProperty.call(params, matchedParam[1])
+  while ((matchedParam = PARAM_REGEX.exec(result)) !== null) {
+    result =
+      result.substring(0, matchedParam.index) +
+      (Object.prototype.hasOwnProperty.call(params, matchedParam[1])
         ? params[matchedParam[1]]
-        : ''
-    );
+        : '') +
+      result.substring(matchedParam.index + matchedParam[0].length);
   }
 
-  while ((matchedKeyword = KEYWORD_REGEX.exec(result))) {
-    result = result.replace(
-      new RegExp(matchedKeyword[0].replace(/\[([^\[\]]+)\]/, '\\[$1\\]'), 'g'),
-      isci.keywords[matchedKeyword[1]]
+  while ((matchedKeyword = KEYWORD_REGEX.exec(result)) !== null) {
+    result =
+      result.substring(0, matchedKeyword.index) +
+      (isci.keywords[matchedKeyword[1]]
         ? processKeyword(isci.keywords[matchedKeyword[1]])
-        : ''
-    );
+        : '') +
+      result.substring(matchedKeyword.index + matchedKeyword[0].length);
   }
 
   return result;
@@ -140,7 +139,7 @@ function next(isci, params = {}) {
 
 /**
  * Get next ID from ISCI Schema without manipulate original ISCI Schema
- * @returns {string}
+ * @returns {object}
  * @param {object} isci ISCI Schema
  * @param {string} isci.pattern ISCI Pattern
  * @param {object} isci.keywords ISCI Keywords

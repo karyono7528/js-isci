@@ -5,10 +5,10 @@
   "license": "MIT",
   "dependencies": {
     "date-format": "^3.0.0",
-    "extend": "^3.0.2",
-    "math-random": "^1.0.4"
+    "extend": "^3.0.2"
   },
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "browserify": "^16.5.0",
     "codecov": "^3.6.1",
     "jest": "^24.9.0",
@@ -17,6 +17,14 @@
   "description": "ISCI library for Javascript",
   "repository": "https://github.com/laodemalfatih/js-isci",
   "author": "Laode Muhammad Al Fatih <laodemalfatih@gmail.com>",
+  "scripts": {
+    "test": "jest && codecov",
+    "build": "browserify src/index.js | uglifyjs -c -m > build/index.min.js"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  },
   "keywords": [
     "isci",
     "unique",
@@ -26,13 +34,5 @@
     "schema",
     "id-generator",
     "random"
-  ],
-  "scripts": {
-    "test": "jest && codecov",
-    "build": "browserify src/index.js | uglifyjs -c -m > build/index.min.js"
-  },
-  "jest": {
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true
-  }
+  ]
 }
